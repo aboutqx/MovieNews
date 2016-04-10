@@ -14,9 +14,10 @@ const {
   ToastAndroid,
   ProgressBarAndroid,
   StatusBar,
+  TouchableWithoutFeedback,
 } = React;
 import Orientation from 'react-native-orientation';
-
+import {GoBack} from '../nav/GoBack';
 const BGWASH = 'rgba(255,255,255,0.8)';
 const WEBVIEW_REF = 'webview';
 const DEFAULT_URL = 'https://baidu.com';
@@ -33,6 +34,7 @@ const PlayMovie=React.createClass({
       currentTime: 0.0,
       loading:1,
       hidden:true,
+      showControls:false,
     };
   },
   componentWillMount:function(){
@@ -57,7 +59,7 @@ const PlayMovie=React.createClass({
     this.setState({currentTime: data.currentTime});
   },
 	render: function(){
-
+    
 		return (
 			<View style={styles.container}>
 		     <StatusBar
@@ -71,9 +73,9 @@ const PlayMovie=React.createClass({
 	},
 	renderPlayMovie:function(){
     return (
+      <TouchableWithoutFeedback onPress={this.toggleControl}>
       <View style={styles.fullScreen}>
-        <TouchableOpacity style={styles.fullScreen} onPress={() => {this.setState({paused: !this.state.paused})}}>
-          <Video source={{uri: this.props.movieSrc}}
+        <Video source={{uri: this.props.movieSrc}}
              style={styles.fullScreen}
              rate={this.state.rate}
              paused={this.state.paused}
@@ -86,12 +88,32 @@ const PlayMovie=React.createClass({
              onError={this.onError}
              onEnd={() => { console.log('Done!') }}
              repeat={true} />
-        </TouchableOpacity>
+        {this._renderControls()}
         <ProgressBarAndroid styleAttr="Inverse" style={[styles.loading,{opacity:this.state.loading}]} color="#e1e1e1"/>
       </View>
+      </TouchableWithoutFeedback>
     );
   },
- 
+  _renderControls:function(){
+    let upText="\u003C";
+    const {navigator}=this.props;
+    if(this.state.showControls){
+      return (
+        <View style={styles.fullScreen}>
+          <Text style={styles.upText} onPress={() => {Orientation.lockToPortrait();GoBack(navigator);}}>{upText}</Text>
+        </View>
+      );
+    } else {
+      return ;
+    }
+  },
+  toggleControl:function(){
+    if(this.state.showControls){
+      this.setState({showControls:false})
+    } else {
+      this.setState({showControls:true})
+    }
+  },
 });
 
 const styles=StyleSheet.create({
@@ -101,6 +123,13 @@ const styles=StyleSheet.create({
     alignItems:'center',
     backgroundColor: 'black',
 	},
+  upText:{
+    position:'absolute',
+    left:20,
+    top:10,
+    color:'#fff',
+    fontSize:25,
+  },
 	webView: {
     backgroundColor: BGWASH,
     height: 350,
