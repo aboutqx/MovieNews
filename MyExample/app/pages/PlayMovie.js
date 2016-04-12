@@ -128,7 +128,7 @@ const styles=StyleSheet.create({
     left:20,
     top:10,
     color:'#fff',
-    fontSize:25,
+    fontSize:30,
   },
 	webView: {
     backgroundColor: BGWASH,
