@@ -50,7 +50,7 @@ const MovieTrailer=React.createClass({
 
     return (
       <Navigator
-        initialRoute={{id: 'Splash',component:Splash }}
+        initialRoute={{id: 'Splash',component:MovieList }}
         renderScene={this._renderScene}
         configureScene={this._configureScene}
         

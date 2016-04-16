@@ -10,6 +10,7 @@ class CheckNetInfo {
     	isConnected:null,
       connectInfo:null,
     }
+    this._handleConnectivityChange=this._handleConnectivityChange.bind(this);
 	}
   check(){
     NetInfo.isConnected.addEventListener(

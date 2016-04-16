@@ -12,13 +12,13 @@ var {
   TouchableHighlight,
 } = React;
 import CheckNetInfo from '../utils/CheckNetInfo';
+import MovieToolbar from '../components/MovieToolbar'
 var PAGE_URL="http://video.mtime.com/trailer/";
-
+var netUtils=new CheckNetInfo();
 
 var MovieList=React.createClass({
   getInitialState:function() {
-    var netUtils=new CheckNetInfo();
-    netUtils.setVars({isConnected:true})//
+
     netUtils.check();
     this.movies=[];
     return {
@@ -27,6 +27,7 @@ var MovieList=React.createClass({
       }),
       loaded: false,    
       movieSrc:'',
+      empty: false,
     };
   },
 
@@ -51,39 +52,45 @@ var MovieList=React.createClass({
 
           var dept=linkDeptPart.match(/_blank\">.+/)[0].substr(8);
           var imgSrc=v.match(/src=".+?"/)[0].substr(4).slice(1,-1);
-          console.log(imgSrc);
+
           var movieId=link.split('/')[3];
           var videoId=link.split('/')[5].slice(0,-5);
           var tmpDate=new Date();
           var tParam=tmpDate.getFullYear()+""+(tmpDate.getMonth()+1)+tmpDate.getDate()+tmpDate.getTime();
           var movieInfoLink='http://api.mtime.com/Service/Video.api?Ajax_CallBack=true&Ajax_CallBackType=Mtime.Api.Pages.VideoService&Ajax_CallBackMethod=GetVideoInfo&Ajax_CrossDomain=1&Ajax_RequestUrl=http://http://video.mtime.com/'+videoId+'/?mid='+movieId+'&t='+tParam+'&Ajax_CallBackArgument0='+videoId;
-
+          
+          var t=dept.split(' ');
+          var movieName=t.shift();  
+          dept="《"+movieName+"》"+t.join(' ')
           self.movies.push({movieInfoLink:movieInfoLink,dept:dept,imgSrc:imgSrc});
-                  
+         
           self.setState({
-            dataSource: self.state.dataSource.cloneWithRows(self.movies),
-            loaded: true,
+              dataSource: self.state.dataSource.cloneWithRows(self.movies),
+              loaded: true,
+              empty:false //reload set empty false
           });
+          
         })
       })
       .catch((error) => {
-        console.warn(error);
+        self.setState({empty:true})
       });
   },
 
   render:function(){
     
     return (
-        <View>
-          <Text>latest movie trailers</Text>
+        <View style={{flex:1}}>
+          <MovieToolbar title="电影预告片" logo={require('../images/mainIcon.png')}/>
           {this.renderContent()}
         </View>
     );
 
   },
   renderContent:function(){
-    if(!netUtils.vars.isConnected){
-      return this.renderNetError();
+
+    if(this.state.empty){
+      return this.renderNoData();
     }
     if (!this.state.loaded) {
       return this.renderLoadingView();
@@ -96,15 +103,17 @@ var MovieList=React.createClass({
       );
     }
   },
-  renderNetError:function(){
+  renderNoData:function(){
     return(
-      <View>
-        <Text>无法连接至网络</Text>
-        <TouchableHighlight onPress={() => {}}>
-          <Text style={styles.textBtn}>
-            刷新重试
-          </Text>
-        </TouchableHighlight>
+      <View style={styles.container}>
+        <View style={{alignItems:'center'}}>
+          <Text style={{marginBottom:7}}>目前没有数据 </Text>
+          <TouchableHighlight onPress={() => {this.fetchData();}} style={[styles.textBtn,{width:70}]}>
+            <Text style={styles.centerText}>
+              刷新重试
+            </Text>
+          </TouchableHighlight>
+        </View>
       </View>
     )
   },
@@ -155,25 +164,28 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fafafa',
     borderBottomColor:'#ccc',
     borderBottomWidth:1,
-    marginBottom:2,
-    paddingBottom:2,
+    marginBottom:3,
+    paddingBottom:3,
+    marginLeft:4,
   },
   rightContainer: {
-    flex: 1,
+    flex:1,
     alignItems:'flex-start',
+    justifyContent:'flex-start',
     flexWrap:'wrap',
     overflow:'visible',
+    flexDirection: 'column',
   },
   title: {
     fontSize: 16,
     lineHeight:26,
-    marginBottom: 8,
-    textAlign: 'center',
+    marginBottom: 18,
+    textAlign: 'left',
     color:'#000',
     opacity:.87,
+    marginLeft:8,
   },
   year: {
     textAlign: 'center',
@@ -185,13 +197,16 @@ var styles = StyleSheet.create({
   listView: {
     paddingTop:2,
     backgroundColor: '#F5FCFF',
+    
   },
   textBtn: {
     borderWidth:1,
-    borderColor:'#ddd',
+    borderColor:'#d11',
+    borderRadius:2,
   },
   centerText:{
     textAlign: 'center',
+    color:'#000'
   },
 });
 
