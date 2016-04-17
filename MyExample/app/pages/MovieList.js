@@ -10,6 +10,7 @@ var {
   Text,
   View,
   TouchableHighlight,
+  StatusBar,
 } = React;
 import CheckNetInfo from '../utils/CheckNetInfo';
 import MovieToolbar from '../components/MovieToolbar'
@@ -81,6 +82,7 @@ var MovieList=React.createClass({
     
     return (
         <View style={{flex:1}}>
+          <StatusBar backgroundColor='#3e9ce9' translucent={true}/>
           <MovieToolbar title="电影预告片" logo={require('../images/mainIcon.png')}/>
           {this.renderContent()}
         </View>

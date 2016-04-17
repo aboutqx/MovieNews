@@ -62,7 +62,7 @@ const PlayMovie=React.createClass({
     
 		return (
 			<View style={styles.container}>
-		     <StatusBar
+		    <StatusBar
           hidden={this.state.hidden}
         />
 		    {this.renderPlayMovie()}
