@@ -1,10 +1,9 @@
 'use strict';
 
-const React = require('react-native');
-import Video from 'react-native-video';
 
-const {
-  Component,
+import Video from 'react-native-video';
+import React, { Component } from 'react';
+import {
   StyleSheet,
   Text,
   View,
@@ -14,8 +13,8 @@ const {
   ToastAndroid,
   ProgressBarAndroid,
   StatusBar,
-  TouchableWithoutFeedback,
-} = React;
+  TouchableWithoutFeedback,} from 'react-native';
+
 import Orientation from 'react-native-orientation';
 import {GoBack} from '../nav/GoBack';
 const BGWASH = 'rgba(255,255,255,0.8)';

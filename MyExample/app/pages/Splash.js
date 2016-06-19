@@ -1,17 +1,16 @@
 'use strict';
 
-const React = require('react-native');
 import MovieList from '../pages/MovieList';
-const {
-  Component,
-  StyleSheet,
+import React, { Component } from 'react';
+import {  StyleSheet,
   Text,
   View,
   Image,
   InteractionManager,
   Dimensions,
-  StatusBar,
-} = React;
+  StatusBar} from 'react-native';
+
+
 const {height, width} = Dimensions.get('window');
 
 export default class Splash extends React.Component{

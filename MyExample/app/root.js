@@ -1,7 +1,6 @@
-import React from 'react-native';
+
 import MovieTrailer from './nav/Main';
-
-
+import React, { Component } from 'react';
 
 
 class Root extends React.Component {

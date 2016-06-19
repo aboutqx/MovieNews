@@ -1,17 +1,14 @@
 'use strict';
-
-const React = require('react-native');
-
-var {
-  Image,
-  Component,
+import React, { Component } from 'react';
+import {   Image,
   ListView,
   StyleSheet,
   Text,
   View,
   TouchableHighlight,
-  StatusBar,
-} = React;
+  StatusBar} from 'react-native';
+
+
 import CheckNetInfo from '../utils/CheckNetInfo';
 import MovieToolbar from '../components/MovieToolbar'
 var PAGE_URL="http://video.mtime.com/trailer/";

@@ -1,16 +1,15 @@
 'use strict';
 
-const React = require('react-native');
 import MovieList from '../pages/MovieList';
 import PlayMovie from '../pages/PlayMovie';
 import Orientation from 'react-native-orientation';
 import Splash from '../pages/Splash';
-const {
-  Component,
+
+import React, { Component } from 'react';
+import { 
   View,
   Navigator,
-  BackAndroid,
-} = React;
+  BackAndroid,} from 'react-native';
 
 const DEV=false;
 

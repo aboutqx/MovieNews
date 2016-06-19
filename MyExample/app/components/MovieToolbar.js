@@ -1,12 +1,11 @@
 'use strict';
 
-import React from 'react-native';
-const {
-	StyleSheet,
-	ToolbarAndroid
-} = React;
+import React, { Component } from 'react';
+import { StyleSheet,
+	ToolbarAndroid } from 'react-native';
+
 import {GoBack} from '../nav/GoBack';
-class MovieToolbar extends React.Component {
+class MovieToolbar extends Component {
 	constructor(props) {
 		super(props);
 		this.onIconClicked = this.onIconClicked.bind(this);
