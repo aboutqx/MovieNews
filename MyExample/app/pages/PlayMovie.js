@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   Dimensions,
   ToastAndroid,
-  ProgressBarAndroid,
+  ActivityIndicator,
   StatusBar,
   TouchableWithoutFeedback,} from 'react-native';
 
@@ -44,11 +44,11 @@ const PlayMovie=React.createClass({
   },
   onLoad: function(data) {
     this.setState({duration: data.duration});
-    console.warn('loaded');
+    //console.warn('loaded');
     this.setState({loading:0});
   },
   onLoadStart:function(){
-    console.warn('loadstart');
+    //console.warn('loadstart');
   },
   onError:function(data){
     //ToastAndroid.show('无法播放该视频', ToastAndroid.SHORT)
@@ -88,7 +88,7 @@ const PlayMovie=React.createClass({
              onEnd={() => { console.log('Done!') }}
              repeat={true} />
         {this._renderControls()}
-        <ProgressBarAndroid styleAttr="Inverse" style={[styles.loading,{opacity:this.state.loading}]} color="#e1e1e1"/>
+        <ActivityIndicator size="large" style={[styles.loading,{opacity:this.state.loading}]} color="#e1e1e1"/>
       </View>
       </TouchableWithoutFeedback>
     );
@@ -139,6 +139,7 @@ const styles=StyleSheet.create({
     top: width/2,
     width:70,
     height:70,
+    transform:[{scale:1.5}],
     marginTop:-35,
     marginLeft:-35,
   },
