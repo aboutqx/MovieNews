@@ -19,11 +19,12 @@ import Orientation from 'react-native-orientation';
 import {GoBack} from '../nav/GoBack';
 const BGWASH = 'rgba(255,255,255,0.8)';
 const WEBVIEW_REF = 'webview';
-const DEFAULT_URL = 'https://baidu.com';
-const {height, width} = Dimensions.get('window');
+let height, width;
 
 const PlayMovie=React.createClass({
   getInitialState: function() {
+    height = Dimensions.get('window').height;
+    width = Dimensions.get('window').width;
     return {
       rate: 1,
       volume: 1,
@@ -44,11 +45,11 @@ const PlayMovie=React.createClass({
   },
   onLoad: function(data) {
     this.setState({duration: data.duration});
-    //console.warn('loaded');
+    console.warn(this.props.movieTitle);
     this.setState({loading:0});
   },
   onLoadStart:function(){
-    //console.warn('loadstart');
+    console.warn('loadstart');
   },
   onError:function(data){
     //ToastAndroid.show('无法播放该视频', ToastAndroid.SHORT)
@@ -87,19 +88,23 @@ const PlayMovie=React.createClass({
              onError={this.onError}
              onEnd={() => { console.log('Done!') }}
              repeat={true} />
+        
+        <ActivityIndicator size="large" style={[{opacity:this.state.loading}]} color="#e1e1e1"/>
         {this._renderControls()}
-        <ActivityIndicator size="large" style={[styles.loading,{opacity:this.state.loading}]} color="#e1e1e1"/>
       </View>
       </TouchableWithoutFeedback>
     );
   },
   _renderControls:function(){
     let upText="\u003C";
-    const {navigator}=this.props;
+    const {navigator,movieTitle}=this.props;
     if(this.state.showControls){
       return (
         <View style={styles.fullScreen}>
-          <Text style={styles.upText} onPress={() => {Orientation.lockToPortrait();GoBack(navigator);}}>{upText}</Text>
+        <TouchableWithoutFeedback  onPress={() => {Orientation.lockToPortrait();GoBack(navigator);}}>
+          <View style={{position:'absolute'}}><Text style={styles.upText} >{upText}</Text></View>
+        </TouchableWithoutFeedback>
+          <Text style={styles.movieTitle}>{movieTitle}</Text>
         </View>
       );
     } else {
@@ -124,10 +129,15 @@ const styles=StyleSheet.create({
 	},
   upText:{
     position:'absolute',
-    left:20,
-    top:10,
+    marginLeft:30,
+    marginTop:20,
     color:'#fff',
     fontSize:30,
+  },
+  movieTitle:{
+    marginLeft:70,
+    position:'absolute',
+    color:'#fff',
   },
 	webView: {
     backgroundColor: BGWASH,

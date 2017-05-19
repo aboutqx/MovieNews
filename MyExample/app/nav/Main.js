@@ -67,7 +67,7 @@ const MovieTrailer=React.createClass({
     
     if (route.id==='PlayMovie'){
       this.canback=true;
-      return <PlayMovie navigator={navigator} movieSrc={route.movieSrc} />
+      return <PlayMovie navigator={navigator} movieSrc={route.movieSrc} movieTitle={route.movieTitle}/>
     }
     let Component = route.component;
     return (

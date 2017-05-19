@@ -58,9 +58,9 @@ var MovieList=React.createClass({
           var movieInfoLink='http://api.mtime.com/Service/Video.api?Ajax_CallBack=true&Ajax_CallBackType=Mtime.Api.Pages.VideoService&Ajax_CallBackMethod=GetVideoInfo&Ajax_CrossDomain=1&Ajax_RequestUrl=http://http://video.mtime.com/'+videoId+'/?mid='+movieId+'&t='+tParam+'&Ajax_CallBackArgument0='+videoId;
           
           var t=dept.split(' ');
-          var movieName=t.shift();  
-          dept="《"+movieName+"》"+t.join(' ')
-          self.movies.push({movieInfoLink:movieInfoLink,dept:dept,imgSrc:imgSrc});
+          var movieTitle=t.shift();  
+          dept="《"+movieTitle+"》"+t.join(' ')
+          self.movies.push({movieInfoLink:movieInfoLink,dept:dept,imgSrc:imgSrc,movieTitle:movieTitle});
          
           self.setState({
               dataSource: self.state.dataSource.cloneWithRows(self.movies),
@@ -128,7 +128,7 @@ var MovieList=React.createClass({
   renderMovie:function(movie:object) {
     return (
       <View style={styles.container}>
-        <TouchableHighlight onPress={() => this._pressRow(movie.movieInfoLink)}>
+        <TouchableHighlight onPress={() => this._gotoMovie(movie.movieInfoLink,movie.movieTitle)}>
         <Image
           source={{uri: movie.imgSrc}}
           style={styles.thumbnail}
@@ -141,7 +141,7 @@ var MovieList=React.createClass({
       </View>
     );
   },
-  _pressRow:function(movieInfoLink:string) {
+  _gotoMovie:function(movieInfoLink:string,movieTitle:string) {
 
     var self=this;
     fetch(movieInfoLink,{}).then(function(response){
@@ -149,7 +149,7 @@ var MovieList=React.createClass({
           
           var movieSrc=text.match(/mp4URL":.+?"/)[0].slice(9,-1);
 
-          self.props.navigator.push({movieSrc:movieSrc,id:'PlayMovie'});
+          self.props.navigator.push({movieTitle:movieTitle,movieSrc:movieSrc,id:'PlayMovie'});
 
         })
     }).catch((error) => {
@@ -176,6 +176,8 @@ var styles = StyleSheet.create({
     flexWrap:'wrap',
     overflow:'visible',
     flexDirection: 'column',
+    marginLeft:8,
+    marginRight:32,
   },
   title: {
     fontSize: 16,
@@ -184,14 +186,14 @@ var styles = StyleSheet.create({
     textAlign: 'left',
     color:'#000',
     opacity:.87,
-    marginLeft:8,
+    
   },
   year: {
     textAlign: 'center',
   },
   thumbnail: {
-    width: 120,
-    height: 90,
+    width: 108,
+    height: 84,
   },
   listView: {
     paddingTop:2,
